@@ -48,10 +48,6 @@ Complete 2 attempts to enable Next
 let attempts = 0;
 const buttons = document.querySelectorAll(".btn");
 const feedback = document.getElementById("feedback");
-document.querySelectorAll('a[dir="ltr"]').forEach(a => {
-    a.style.display = 'none';
-});
-
 
 buttons.forEach(button => {
   button.addEventListener("click", () => {
@@ -68,7 +64,7 @@ buttons.forEach(button => {
       } else {
         feedback.textContent = "The correct answer is Cat.";
         buttons.forEach(b => b.disabled = true);
-   document.getElementById('block-next').style.display = 'inline-block';
+   document.getElementById('block-next').style.display = 'none';
       }
     }
   });
