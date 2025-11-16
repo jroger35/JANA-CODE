@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Button Quiz</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  .btn { 
+    display: block; 
+    margin: 10px 0; 
+    padding: 10px 20px; 
+    font-size: 16px; 
+    cursor: pointer; 
+  }
+  #feedback { font-weight: bold; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<h3>What is the note on the staff?</h3>
+
+<button class="btn" data-answer="Cat">A) Cat</button>
+<button class="btn" data-answer="Dog">B) Dog</button>
+<button class="btn" data-answer="Emu">C) Emu</button>
+
+<p id="feedback"></p>
+
+<script>
+let attempts = 0;
+const buttons = document.querySelectorAll(".btn");
+const feedback = document.getElementById("feedback");
+
+buttons.forEach(button => {
+  button.addEventListener("click", () => {
+    const answer = button.getAttribute("data-answer");
+    attempts++;
+
+    if (answer === "Cat") {
+      feedback.textContent = "That is correct!";
+      buttons.forEach(b => b.disabled = true);
+    } else {
+      if (attempts === 1) {
+        feedback.textContent = "Try again.";
+      } else {
+        feedback.textContent = "The correct answer is Cat.";
+        buttons.forEach(b => b.disabled = true);
+      }
+    }
+  });
+});
+</script>
