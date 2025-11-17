@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Flashcard Loop with 3 Questions</title>
+<style>
+  body { font-family: Arial; padding: 20px; }
+  .feedback { margin-top: 10px; font-weight: bold; }
+  .incorrect { color: red; }
+  .correct { color: green; }
+  button { margin-top: 10px; margin-right: 5px; }
+  img { display: block; margin-top: 10px; max-width: 300px; }
+  .progress { margin-bottom: 15px; font-weight: bold; }
+</style>
+</head>
+<body>
+<h2>Flashcard Practice: Achieve 2 Correct Attempts Per Question</h2>
+
+<div id="question-container"></div>
+
+<script>
+const questions = [
+  {
+    text: "Page 1 - What is the note on the staff?",
+    image: "https://www.w3schools.com/images/w3schools_green.jpg",
+    options: [
+      { text: "A", feedback: "No, that's not correct. Look at the second line from the bottom." },
+      { text: "B", feedback: "Correct! B is the note on the second line.", correct: true },
+      { text: "C", feedback: "Not quite. C is higher than the note on this staff." },
+      { text: "D", feedback: "Incorrect. D is above the staff." }
+    ],
+    consecutiveCorrect: 0
+  },
+  {
+    text: "Page 2 - What is the note on the staff?",
+    image: "https://www.w3schools.com/images/w3schools_green.jpg",
+    options: [
+      { text: "E", feedback: "No, check the third line from the bottom." },
+      { text: "F", feedback: "Not quite. This note is lower." },
+      { text: "G", feedback: "Correct! G is on the second line from the top.", correct: true },
+      { text: "A", feedback: "Incorrect. A is higher than this note." }
+    ],
+    consecutiveCorrect: 0
+  },
+  {
+    text: "Page 3 - Identify the note on this staff",
+    image: "https://www.w3schools.com/images/w3schools_green.jpg",
+    options: [
+      { text: "C", feedback: "Incorrect. Look at the middle line." },
+      { text: "D", feedback: "Correct! D is on the middle line.", correct: true },
+      { text: "E", feedback: "No, E is above this note." },
+      { text: "F", feedback: "Not quite. F is too high." }
+    ],
+    consecutiveCorrect: 0
+  }
+];
+
+let currentQuestionIndex = 0;
+let firstAttempt = true;
+const container = document.getElementById("question-container");
+
+function showCurrentQuestion() {
+  // Filter out questions already mastered (2 consecutive correct)
+  const activeQuestions = questions.filter(q => q.consecutiveCorrect < 2);
+  if (activeQuestions.length === 0) {
+    showCompletionMessage();
+    return;
+  }
+
+  // Cycle to next active question
+  if (currentQuestionIndex >= activeQuestions.length) currentQuestionIndex = 0;
+  const q = activeQuestions[currentQuestionIndex];
+  firstAttempt = true;
+
+  container.innerHTML = "";
+
+  // Progress display
+  const progress = document.createElement("div");
+  progress.classList.add("progress");
+  progress.textContent = `Questions mastered (2 correct in a row): ${questions.filter(q => q.consecutiveCorrect >= 2).length} / ${questions.length}`;
+  container.appendChild(progress);
+
+  // Question text
+  const questionText = document.createElement("div");
+  questionText.innerHTML = `<strong>Q${currentQuestionIndex + 1}:</strong> ${q.text}`;
+  container.appendChild(questionText);
+
+  // Question image
+  const img = document.createElement("img");
+  img.src = q.image;
+  img.alt = "Question Image";
+  container.appendChild(img);
+
+  // Option buttons
+  q.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.textContent = opt.text;
+    btn.onclick = () => handleAnswer(opt, q, activeQuestions);
+    container.appendChild(btn);
+  });
+
+  // Feedback
+  const fb = document.createElement("div");
+  fb.classList.add("feedback");
+  container.appendChild(fb);
+
+  // Next button
+  const nextBtn = document.createElement("button");
+  nextBtn.textContent = "Next Question ➡";
+  nextBtn.onclick = () => {
+    currentQuestionIndex = (currentQuestionIndex + 1) % activeQuestions.length;
+    showCurrentQuestion();
+  };
+  container.appendChild(nextBtn);
+}
+
+function handleAnswer(option, question, activeQuestions) {
+  const fb = container.querySelector(".feedback");
+  fb.textContent = option.feedback;
+  fb.classList.remove("incorrect", "correct");
+
+  if (option.correct) {
+    fb.classList.add("correct");
+    if (firstAttempt) {
+      question.consecutiveCorrect++;
+    }
+  } else {
+    fb.classList.add("incorrect");
+    // reset consecutive correct if wrong
+    question.consecutiveCorrect = 0;
+  }
+
+  firstAttempt = false;
+
+  // Check if all questions are mastered
+  if (questions.every(q => q.consecutiveCorrect >= 2)) {
+    showCompletionMessage();
+  }
+
+  // Update progress
+  const progress = container.querySelector(".progress");
+  progress.textContent = `Questions mastered (2 correct in a row): ${questions.filter(q => q.consecutiveCorrect >= 2).length} / ${questions.length}`;
+}
+
+function showCompletionMessage() {
+  container.innerHTML = "";
+  const completeMsg = document.createElement("h3");
+  completeMsg.textContent = "🎉 All questions answered correctly 2 times in a row! Mastery achieved!";
+  container.appendChild(completeMsg);
+
+  const backButton = document.createElement("a");
+  backButton.textContent = "⬅ Go Back to Previous Canvas Page";
+  backButton.href = "https://canvas.instructure.com/courses/13454078/pages/what-is-the-note-on-the-staff-copy";
+  backButton.target = "_top"; 
+  backButton.style.display = "inline-block";
+  backButton.style.marginTop = "15px";
+  backButton.style.padding = "10px 15px";
+  backButton.style.backgroundColor = "#0073e6";
+  backButton.style.color = "#fff";
+  backButton.style.textDecoration = "none";
+  backButton.style.borderRadius = "5px";
+
+  container.appendChild(backButton);
+}
+
+// Start the first question
+showCurrentQuestion();
+</script>
+</body>
+</html>
+
