@@ -165,23 +165,39 @@ function handleAnswer(option, question, activeQuestions) {
 
 function showCompletionMessage() {
   container.innerHTML = "";
+
+  // Define the approved ranges
+  const ranges = [
+    { min: 5815, max: 5820 },
+    { min: 1264, max: 1270 },
+    { min: 9836, max: 9840 }
+  ];
+
+  // Pick a random range
+  const chosenRange = ranges[Math.floor(Math.random() * ranges.length)];
+
+  // Pick a random number in that range
+  const completionCode = Math.floor(
+    Math.random() * (chosenRange.max - chosenRange.min + 1)
+  ) + chosenRange.min;
+
+  // Display the message
   const completeMsg = document.createElement("h3");
-  completeMsg.textContent = "🎉 All questions answered correctly 2 times in a row! Mastery achieved!";
+  completeMsg.textContent = "Mastery achieved! Input this special code on the next page to get credit!";
   container.appendChild(completeMsg);
 
-  const backButton = document.createElement("a");
-  backButton.textContent = "Go to Mastery Page";
-  backButton.href = "https://canvas.instructure.com/courses/13454078/assignments/60120124";
-  backButton.target = "_top"; 
-  backButton.style.display = "inline-block";
-  backButton.style.marginTop = "15px";
-  backButton.style.padding = "10px 15px";
-  backButton.style.backgroundColor = "#0073e6";
-  backButton.style.color = "#fff";
-  backButton.style.textDecoration = "none";
-  backButton.style.borderRadius = "5px";
+  const codeMsg = document.createElement("div");
+  codeMsg.style.fontSize = "24px";
+  codeMsg.style.fontWeight = "bold";
+  codeMsg.style.marginTop = "20px";
+  codeMsg.style.color = "#0073e6";
+  codeMsg.textContent = "Your completion code is: " + completionCode;
+  container.appendChild(codeMsg);
 
-  container.appendChild(backButton);
+  const note = document.createElement("p");
+  note.textContent = "Write this code down to prove you completed the activity.";
+  note.style.marginTop = "10px";
+  container.appendChild(note);
 }
 
 showCurrentQuestion();
