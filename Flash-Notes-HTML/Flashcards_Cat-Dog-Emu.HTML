@@ -183,7 +183,7 @@ function showCompletionMessage() {
 
   // Display the message
   const completeMsg = document.createElement("h3");
-  completeMsg.textContent = "Mastery achieved! Input this special code on the next page to get credit!";
+  completeMsg.textContent = "Mastery achieved! Input this code on the next page to get credit.";
   container.appendChild(completeMsg);
 
   const codeMsg = document.createElement("div");
@@ -193,11 +193,25 @@ function showCompletionMessage() {
   codeMsg.style.color = "#0073e6";
   codeMsg.textContent = "Your completion code is: " + completionCode;
   container.appendChild(codeMsg);
+ 
 
-  const note = document.createElement("p");
-  note.textContent = "Write this code down to prove you completed the activity.";
-  note.style.marginTop = "10px";
-  container.appendChild(note);
+// Navigation Button to the Canvas quiz
+  const nextButton = document.createElement("a");
+  nextButton.textContent = "Continue to Input Code";
+  nextButton.href = "https://canvas.instructure.com/courses/13454078/quizzes/24087249/take";
+  nextButton.target = "_top"; 
+  nextButton.style.display = "inline-block";
+  nextButton.style.marginTop = "25px";
+  nextButton.style.padding = "12px 18px";
+  nextButton.style.backgroundColor = "#28a745";
+  nextButton.style.color = "#fff";
+  nextButton.style.fontSize = "18px";
+  nextButton.style.fontWeight = "bold";
+  nextButton.style.textDecoration = "none";
+  nextButton.style.borderRadius = "6px";
+  nextButton.style.border = "2px solid #1e7e34";
+
+  container.appendChild(nextButton);
 }
 
 showCurrentQuestion();
