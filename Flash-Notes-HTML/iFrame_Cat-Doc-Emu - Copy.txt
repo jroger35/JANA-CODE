@@ -1,3 +1,0 @@
-<iframe src="https://jroger35.github.io/JANA-CODE/Flash-Notes-HTML/Answer-Dog.HTML"
-        width="100%" height="400" frameborder="0">
-</iframe>
