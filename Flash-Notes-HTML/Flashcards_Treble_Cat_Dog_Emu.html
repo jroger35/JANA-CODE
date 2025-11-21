@@ -6,8 +6,8 @@
 <style>
   body { font-family: Arial; padding: 20px; }
   .feedback { margin-top: 10px; font-weight: bold; }
-  .incorrect { color: red; }
-  .correct { color: green; }
+  .incorrect { color: black; }
+  .correct { color: black; }
   button { margin-top: 10px; margin-right: 5px; }
   .images { display: flex; gap: 10px; margin-top: 10px; }
   /* First image reduced by ~30% */
@@ -27,54 +27,63 @@
 </style>
 </head>
 <body>
-<h2>Flashcard Practice: Achieve 2 Correct Attempts Per Question</h2>
+<h2>Flash Notes: For same note, get 2 correct on first try - Cat, Dog, Emu.</h2>
 
 <div id="question-container"></div>
 
 <script>
 
-const imageKeyboard = "https://raw.githubusercontent.com/jroger35/JANA-CODE/main/Images/Keyboard_Cat-Dog-Emu.JPG";
+const imageKeyboard = "https://raw.githubusercontent.com/jroger35/JANA-CODE/main/Images/Keyboard_Cat_Dog_Emu.jpg";
 
+const correctCat = "Correct! That is the Cat, outside the Dog House.";
+const correctDog = "Correct! That is the Dog inside the Dog House.";
+const correctEmu = "Correct! That is the Emu, on the other side of the Dog House.";
+
+const wrongCat = "Try again. Cat is on the outside of the Dog House.";
+const wrongDog = "Try again. Dog is inside the Dog House."; 
+const wrongEmu = "Try again. Emu is on the other side of the Dog House."; 
+const wrongFrog = "Try again. Frog is not a key around the Dog House."; 
+const wrongBee = "Try again. Bee is not a key around the Dog House."; 
 const questions = [
   {
-    text: "Page 1 - What is the note on the staff?",
+    text: "Note 1 - What is the note on the staff?",
     images: [
-      "https://www.w3schools.com/images/w3schools_green.jpg",
+      "https://raw.githubusercontent.com/jroger35/JANA-CODE/main/Images/Note_Treble_C.jpg",
       imageKeyboard 
     ],
     options: [
-      { text: "A", feedback: "No, that's not correct. Look at the second line from the bottom." },
-      { text: "B", feedback: "Correct! B is the note on the second line.", correct: true },
-      { text: "C", feedback: "Not quite. C is higher than the note on this staff." },
-      { text: "D", feedback: "Incorrect. D is above the staff." }
+      { text: "Cat", feedback: correctCat, correct: true },
+      { text: "Dog", feedback: wrongDog },
+      { text: "Emu", feedback: wrongEmu },
+      { text: "Frog", feedback: wrongFrog }
     ],
     consecutiveCorrect: 0
   },
   {
-    text: "Page 2 - What is the note on the staff?",
+    text: "Note 2 - What is the note on the staff?",
     images: [
-      "https://www.w3schools.com/images/w3schools_green.jpg",
+      "https://raw.githubusercontent.com/jroger35/JANA-CODE/main/Images/Note_Treble_D.jpg",
       imageKeyboard 
     ],
     options: [
-      { text: "E", feedback: "No, check the third line from the bottom." },
-      { text: "F", feedback: "Not quite. This note is lower." },
-      { text: "G", feedback: "Correct! G is on the second line from the top.", correct: true },
-      { text: "A", feedback: "Incorrect. A is higher than this note." }
+      { text: "Cat", feedback: wrongCat },
+      { text: "Dog", feedback: correctDog, correct: true},
+      { text: "Emu", feedback: wrongEmu,  },
+      { text: "Bee", feedback: wrongBee}
     ],
     consecutiveCorrect: 0
   },
   {
-    text: "Page 3 - Identify the note on this staff",
+    text: "Note 3 - What is the note on the staff?",
     images: [
-      "https://www.w3schools.com/images/w3schools_green.jpg",
+      "https://raw.githubusercontent.com/jroger35/JANA-CODE/main/Images/Note_Treble_E.jpg",
       imageKeyboard 
     ],
     options: [
-      { text: "C", feedback: "Incorrect. Look at the middle line." },
-      { text: "D", feedback: "Correct! D is on the middle line.", correct: true },
-      { text: "E", feedback: "No, E is above this note." },
-      { text: "F", feedback: "Not quite. F is too high." }
+      { text: "Cat", feedback: wrongCat},
+      { text: "Dog", feedback: wrongDog},
+      { text: "Emu", feedback: correctEmu, correct: true },
+      { text: "Frog", feedback: wrongFrog}
     ],
     consecutiveCorrect: 0
   }
@@ -100,7 +109,7 @@ function showCurrentQuestion() {
   // Progress display
   const progress = document.createElement("div");
   progress.classList.add("progress");
-  progress.textContent = `Questions mastered (2 correct in a row): ${questions.filter(q => q.consecutiveCorrect >= 2).length} / ${questions.length}`;
+  progress.textContent = `To master: For same note, 2 correct in a row on first try.: ${questions.filter(q => q.consecutiveCorrect >= 2).length} / ${questions.length}`;
   container.appendChild(progress);
 
   // Question text
@@ -120,7 +129,7 @@ function showCurrentQuestion() {
   container.appendChild(imageContainer);
 
   // Option buttons
-  q.options.forEach(opt => {
+  shuffle(q.options).forEach(opt => {
     const btn = document.createElement("button");
     btn.textContent = opt.text;
     btn.onclick = () => handleAnswer(opt, q, activeQuestions);
@@ -142,18 +151,25 @@ function showCurrentQuestion() {
   container.appendChild(nextBtn);
 }
 
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
 function handleAnswer(option, question, activeQuestions) {
   const fb = container.querySelector(".feedback");
   fb.textContent = option.feedback;
   fb.classList.remove("incorrect", "correct");
 
   if (option.correct) {
+    fb.innerHTML = `<span style="color:green;">✅</span> ${fb.textContent}`;
     fb.classList.add("correct");
     if (firstAttempt) question.consecutiveCorrect++;
   } else {
+    fb.innerHTML = `<span style="color:red;">✖</span> ${fb.textContent}`;
     fb.classList.add("incorrect");
     question.consecutiveCorrect = 0;
   }
+
 
   firstAttempt = false;
 
