@@ -94,6 +94,7 @@
 
   .correct-icon { color: green; }
   .incorrect-icon { color: red; }
+ 
 </style>
 </head>
 <body>
@@ -115,8 +116,8 @@ const messageEmu = "Try again. Emu is on the bottom line of the staff.";
 const feedback = document.getElementById("feedback");
 const optionsContainer = document.getElementById("options-container");
 
-/* Choices — 2nd is correct */
-const choices = ["  ", "  ", "  "];
+/* Choices */
+const choices = ["Cat", "Dog", "Emu"];
 
 /* Create accessible radio buttons with individual tooltips */
 choices.forEach((choice, index) => {
@@ -151,6 +152,7 @@ choices.forEach((choice, index) => {
 
 const radios = document.querySelectorAll("input[name='answer']");
 const optionLabels = document.querySelectorAll(".option");
+optionLabels[0].style.marginLeft = "150px";
 
 
 /* ---- Behavior ---- */
@@ -195,6 +197,7 @@ radios.forEach((radio, index) => {
         <span class="sr-only">${message}</span>
       `;
     }  
+    feedback.style.marginLeft  = "100px";
   });
 });
 </script>
