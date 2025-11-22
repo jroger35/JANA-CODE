@@ -107,8 +107,10 @@
 
 <script>
 /*****************************************************/
-
-const correctMessage = "Correct. The note is the Dog.";
+ 
+const messageCat = "Try again. Cat is on the line below the staff.";
+const messageDog = "Correct. Dog is the space below the staff.";
+const messageEmu = "Try again. Emu is on the bottom line of the staff.";
 
 const feedback = document.getElementById("feedback");
 const optionsContainer = document.getElementById("options-container");
@@ -169,19 +171,30 @@ radios.forEach((radio, index) => {
       return;
     }
 
-    const firstSelected = radios[1].checked;
+    const selectedCat = radios[0].checked;
+    const selectedDog = radios[1].checked;
+    const selectedEmu = radios[2].checked;
 
-    if (firstSelected) {
+    let message = "";
+    if (selectedCat) {
+	message = messageCat;
+    } else if (selectedDog) {
+	message = messageDog;
+    } else {
+ 	message = messageEmu;
+    }
+
+    if (selectedDog ) {
       feedback.innerHTML = `
-        <span class="correct-icon">✅</span> ${correctMessage}
-        <span class="sr-only">Your answer is correct.</span>
+        <span class="correct-icon">✅</span> ${message}
+        <span class="sr-only">${message}</span>
       `;
     } else {
       feedback.innerHTML = `
-        <span class="incorrect-icon">❌</span> Try again.
-        <span class="sr-only">Your answer is incorrect. Try again.</span>
+        <span class="incorrect-icon">❌</span> ${message}
+        <span class="sr-only">${message}</span>
       `;
-    }
+    }  
   });
 });
 </script>
