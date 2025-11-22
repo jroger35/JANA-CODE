@@ -107,12 +107,35 @@
  
 <script>
 /*****************************************************/
- 
-const messageCat = "Try again. Cat is on the line below the staff.";
-const messageDog = "Try again. Dog is the space below the staff.";
-const messageEmu = "Correct! Emu is on the bottom line of the staff.";
 
-const iCorrect = 2;
+/* Get parameter for correct answer. */
+  const params = new URLSearchParams(window.location.search);
+
+  let correct = params.get("correct");
+console.log(correct);
+
+/* Set messages based on correct. */
+let messageCat = "Cat is on the line below the staff.";
+let messageDog = "Dog is the space below the staff.";
+let messageEmu = "Emu is on the bottom line of the staff.";
+let iCorrect = -1;
+
+if (correct === "Cat") {
+   messageCat = "Correct! " + messageCat;
+   messageDog = "Try again. " + messageDog;
+   messageEmu = "Try again. " + messageEmu;
+   iCorrect = 0;
+} else if (correct === "Dog") {
+   messageCat = "Try again. " + messageCat;
+   messageDog = "Correct! " + messageDog;
+   messageEmu = "Try again. " + messageEmu;
+   iCorrect = 1;
+} else {
+   messageCat = "Try again. " + messageCat;
+   messageDog = "Try again. " + messageDog;
+   messageEmu = "Correct! " + messageEmu;
+   iCorrect = 2;
+}
 
 const feedback = document.getElementById("feedback");
 const optionsContainer = document.getElementById("options-container");
