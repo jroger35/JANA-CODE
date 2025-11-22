@@ -112,6 +112,8 @@ const messageCat = "Try again. Cat is on the line below the staff.";
 const messageDog = "Correct. Dog is the space below the staff.";
 const messageEmu = "Try again. Emu is on the bottom line of the staff.";
 
+const iCorrect = 1;
+
 const feedback = document.getElementById("feedback");
 const optionsContainer = document.getElementById("options-container");
 
@@ -177,15 +179,19 @@ radios.forEach((radio, index) => {
     const selectedEmu = radios[2].checked;
 
     let message = "";
+    let isCorrect = false;
     if (selectedCat) {
 	message = messageCat;
+        if (iCorrect === 0) isCorrect = true;
     } else if (selectedDog) {
 	message = messageDog;
+        if (iCorrect === 1) isCorrect = true;
     } else {
  	message = messageEmu;
+        if (iCorrect === 2) isCorrect = true;
     }
 
-    if (selectedDog ) {
+    if (isCorrect) {
       feedback.innerHTML = `
         <span class="correct-icon">✅</span> ${message}
         <span class="sr-only">${message}</span>

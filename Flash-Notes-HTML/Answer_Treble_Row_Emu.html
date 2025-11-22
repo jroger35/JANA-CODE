@@ -94,6 +94,7 @@
 
   .correct-icon { color: green; }
   .incorrect-icon { color: red; }
+ 
 </style>
 </head>
 <body>
@@ -103,18 +104,21 @@
 <div id="options-container" role="radiogroup" aria-labelledby="question-text"></div>
 
 <p id="feedback" aria-live="polite"></p>
-
-
+ 
 <script>
 /*****************************************************/
+ 
+const messageCat = "Try again. Cat is on the line below the staff.";
+const messageDog = "Try again. Dog is the space below the staff.";
+const messageEmu = "Correct! Emu is on the bottom line of the staff.";
 
-const correctMessage = "Correct. The note is the Emu.";
+const iCorrect = 2;
 
 const feedback = document.getElementById("feedback");
 const optionsContainer = document.getElementById("options-container");
 
-/* Choices — 3rd is correct */
-const choices = ["  ", "  ", "  "];
+/* Choices */
+const choices = ["Cat", "Dog", "Emu"];
 
 /* Create accessible radio buttons with individual tooltips */
 choices.forEach((choice, index) => {
@@ -149,6 +153,7 @@ choices.forEach((choice, index) => {
 
 const radios = document.querySelectorAll("input[name='answer']");
 const optionLabels = document.querySelectorAll(".option");
+optionLabels[0].style.marginLeft = "450px";
 
 
 /* ---- Behavior ---- */
@@ -169,19 +174,35 @@ radios.forEach((radio, index) => {
       return;
     }
 
-    const firstSelected = radios[2].checked;
+    const selectedCat = radios[0].checked;
+    const selectedDog = radios[1].checked;
+    const selectedEmu = radios[2].checked;
 
-    if (firstSelected) {
+    let message = "";
+    let isCorrect = false;
+    if (selectedCat) {
+	message = messageCat;
+        if (iCorrect === 0) isCorrect = true;
+    } else if (selectedDog) {
+	message = messageDog;
+        if (iCorrect === 1) isCorrect = true;
+    } else {
+ 	message = messageEmu;
+        if (iCorrect === 2) isCorrect = true;
+    }
+
+    if (isCorrect) {
       feedback.innerHTML = `
-        <span class="correct-icon">✅</span> ${correctMessage}
-        <span class="sr-only">Your answer is correct.</span>
+        <span class="correct-icon">✅</span> ${message}
+        <span class="sr-only">${message}</span>
       `;
     } else {
       feedback.innerHTML = `
-        <span class="incorrect-icon">❌</span> Try again.
-        <span class="sr-only">Your answer is incorrect. Try again.</span>
+        <span class="incorrect-icon">❌</span> ${message}
+        <span class="sr-only">${message}</span>
       `;
-    }
+    }  
+    feedback.style.marginLeft  = "400px";
   });
 });
 </script>
