@@ -123,7 +123,7 @@ function showCurrentQuestion() {
   container.innerHTML = "";
 
   // Progress display
-  const progressText = "Pick Cat correctly on first try, 2 times in row. Do the same for Dog and Emu. Mastered: ";
+  const progressText = "To master, pick note C correctly on first try, 2 times in row. Do the same for notes D and E. Mastered: ";
   const progress = document.createElement("div");
   progress.classList.add("progress");
   progress.textContent = `${progressText} ${questions.filter(q => q.consecutiveCorrect >= 2).length} / ${questions.length}`;
