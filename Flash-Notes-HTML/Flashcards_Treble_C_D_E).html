@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Flashcard Loop with 2 Images per Question</title>
+<style>
+  body { font-family: Arial; padding: 5px; }
+  .feedback { margin-top: 10px; font-weight: bold; }
+  .incorrect { color: black; }
+  .correct { color: black; }
+
+  button { margin-top: 0px; margin-right: 5px; font-size:16px}
+  .images { display: flex; gap: 10px; margin-top: 3px;  margin-bottom: 0px; }
+  
+  .images img:first-child { 
+     max-width: 100%;
+     height: auto;
+     object-fit: contain;
+  }
+  .images img:last-child {    
+     width: auto;
+     height: auto; 
+     object-fit: contain;
+  }
+  .progress { margin-bottom: 15px; font-weight: bold; }
+
+  .image-wrapper {
+     display: flex;
+     flex-direction: column;
+     align-items: center; 
+     margin-bottom: 0px;
+     padding-bottom: 0px;
+   }
+
+  .caption {
+     max-width: 160px;
+     text-align: left;
+     white-space: normal;
+     margin-top: 2px;
+     margin-left: 10px;
+     font-size: 18px; 
+   } 
+
+</style>
+</head>
+<body>
+
+<div id="question-container"></div>
+
+<script>
+
+const imageKeyboard = "https://raw.githubusercontent.com/jroger35/JANA-CODE/main/Images/Keyboard_Treble_C_D_E.jpg";
+
+const correctCat = "Correct! Cat is the line below the staff.";
+const correctDog = "Correct! Dog is the space below the staff.";
+const correctEmu = "Correct! Emu is the bottom line.";
+
+const wrongCat = "Try again. Cat is the line below the staff.";
+const wrongDog = "Try again. Dog is the space below the staff."; 
+const wrongEmu = "Try again. Emu is the bottom line of the staff."; 
+const wrongFrog = "Try again. Frog is not a key around the Dog House."; 
+const wrongBee = "Try again. Bee is not a key around the Dog House."; 
+const questions = [
+  {
+    text: "",
+    images: [
+      "https://raw.githubusercontent.com/jroger35/JANA-CODE/main/Images/Note_Treble_C.jpg",
+      imageKeyboard 
+    ],
+    options: [
+      { text: "Cat", feedback: correctCat, correct: true },
+      { text: "Dog", feedback: wrongDog },
+      { text: "Emu", feedback: wrongEmu },
+      { text: "Frog", feedback: wrongFrog }
+    ],
+    consecutiveCorrect: 0
+  },
+  {
+    text: "",
+    images: [
+      "https://raw.githubusercontent.com/jroger35/JANA-CODE/main/Images/Note_Treble_D.jpg",
+      imageKeyboard 
+    ],
+    options: [
+      { text: "Cat", feedback: wrongCat },
+      { text: "Dog", feedback: correctDog, correct: true},
+      { text: "Emu", feedback: wrongEmu,  },
+      { text: "Bee", feedback: wrongBee}
+    ],
+    consecutiveCorrect: 0
+  },
+  {
+    text: "",
+    images: [
+      "https://raw.githubusercontent.com/jroger35/JANA-CODE/main/Images/Note_Treble_E.jpg",
+      imageKeyboard 
+    ],
+    options: [
+      { text: "Cat", feedback: wrongCat},
+      { text: "Dog", feedback: wrongDog},
+      { text: "Emu", feedback: correctEmu, correct: true },
+      { text: "Frog", feedback: wrongFrog}
+    ],
+    consecutiveCorrect: 0
+  }
+];
+
+let currentQuestionIndex = 0;
+let firstAttempt = true;
+const container = document.getElementById("question-container");
+
+function showCurrentQuestion() {
+  const activeQuestions = questions.filter(q => q.consecutiveCorrect < 2);
+  if (activeQuestions.length === 0) {
+    showCompletionMessage();
+    return;
+  }
+
+  if (currentQuestionIndex >= activeQuestions.length) currentQuestionIndex = 0;
+  const q = activeQuestions[currentQuestionIndex];
+  firstAttempt = true;
+
+  container.innerHTML = "";
+
+  // Progress display
+  const progressText = "Pick Cat correctly on first try, 2 times in row. Do the same for Dog and Emu. Mastered: ";
+  const progress = document.createElement("div");
+  progress.classList.add("progress");
+  progress.textContent = `${progressText} ${questions.filter(q => q.consecutiveCorrect >= 2).length} / ${questions.length}`;
+  container.appendChild(progress);
+
+ // Two images side by side
+const imageContainer = document.createElement("div");
+imageContainer.classList.add("images");
+
+q.images.forEach((imgUrl, index) => {
+
+  // Wrapper ensures image + text stack vertically
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("image-wrapper");
+
+  const img = document.createElement("img");
+  img.src = imgUrl;
+  img.alt = "Question Image";
+
+  const whatIs = document.createElement("div");
+  whatIs.textContent = "What is the name of the note?";
+  whatIs.classList.add("caption");
+
+  // Add image and text to wrapper (vertical)
+  wrapper.appendChild(img);
+  if (index === 0) {
+  	wrapper.appendChild(whatIs);
+  }
+
+  // Add wrapper to the main image container (horizontal layout)
+  imageContainer.appendChild(wrapper);
+});
+
+  container.appendChild(imageContainer);
+
+  // Option buttons
+    q.options.forEach((opt, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = opt.text;
+    if (index === 0) {
+	btn.style.marginLeft = "50%";
+    }
+    btn.onclick = () => handleAnswer(opt, q, activeQuestions);
+    container.appendChild(btn);
+  });
+
+  // Feedback
+  const fb = document.createElement("div");
+  fb.classList.add("feedback");
+  container.appendChild(fb);
+
+  // Next button
+  const nextBtn = document.createElement("button");
+  nextBtn.textContent = "Next Note ➡";
+  nextBtn.style.marginLeft = "50%";
+  nextBtn.style.marginTop = "12px";
+  nextBtn.onclick = () => {
+    currentQuestionIndex = (currentQuestionIndex + 1) % activeQuestions.length;
+    showCurrentQuestion();
+  };
+  container.appendChild(nextBtn);
+}
+
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+function handleAnswer(option, question, activeQuestions) {
+  const fb = container.querySelector(".feedback");
+  fb.textContent = option.feedback;
+  fb.style.marginLeft = "40%";
+  fb.classList.remove("incorrect", "correct");
+
+  if (option.correct) {
+    fb.innerHTML = `<span style="color:green;">✅</span> ${fb.textContent}`;
+    fb.classList.add("correct");
+    if (firstAttempt) question.consecutiveCorrect++;
+  } else {
+    fb.innerHTML = `<span style="color:red;">✖</span> ${fb.textContent}`;
+    fb.classList.add("incorrect");
+    question.consecutiveCorrect = 0;
+  }
+
+
+  firstAttempt = false;
+
+  if (questions.every(q => q.consecutiveCorrect >= 2)) showCompletionMessage();
+
+  const progress = container.querySelector(".progress");
+  progress.textContent = `${progressText}  ${questions.filter(q => q.consecutiveCorrect >= 2).length} / ${questions.length}`;
+}
+
+function showCompletionMessage() {
+  container.innerHTML = "";
+
+  // Define the approved ranges
+  const ranges = [
+    { min: 5815, max: 5820 },
+    { min: 1264, max: 1270 },
+    { min: 9836, max: 9840 }
+  ];
+
+  // Pick a random range
+  const chosenRange = ranges[Math.floor(Math.random() * ranges.length)];
+
+  // Pick a random number in that range
+  const completionCode = Math.floor(
+    Math.random() * (chosenRange.max - chosenRange.min + 1)
+  ) + chosenRange.min;
+
+  // Display the message
+  const completeMsg = document.createElement("h3");
+  completeMsg.textContent = "Mastery achieved! Input this code on the next page to get credit.";
+  container.appendChild(completeMsg);
+
+  const codeMsg = document.createElement("div");
+  codeMsg.style.fontSize = "24px";
+  codeMsg.style.fontWeight = "bold";
+  codeMsg.style.marginTop = "20px";
+  codeMsg.style.color = "#0073e6";
+  codeMsg.textContent = "Your completion code is: " + completionCode;
+  container.appendChild(codeMsg);
+ 
+ 
+}
+
+showCurrentQuestion();
+</script>
+</body>
+</html>
