@@ -118,55 +118,30 @@ console.log(correct);
 let messageCat = "Cat is on the line below the staff.";
 let messageDog = "Dog is the space below the staff.";
 let messageEmu = "Emu is on the bottom line of the staff.";
-let messageC = "C is on the line below the staff.";
-let messageD = "D is the space below the staff.";
-let messageE = "E is on the bottom line of the staff.";
 let iCorrect = -1;
 
-let paramCatDogEmu = 1;
-
 if (correct === "Cat") {
-   messageCat = "Yes! " + messageCat;
+   messageCat = "Correct! " + messageCat;
    messageDog = "Try again. " + messageDog;
    messageEmu = "Try again. " + messageEmu;
    iCorrect = 0;
 } else if (correct === "Dog") {
    messageCat = "Try again. " + messageCat;
-   messageDog = "Yes! " + messageDog;
+   messageDog = "Correct! " + messageDog;
    messageEmu = "Try again. " + messageEmu;
    iCorrect = 1;
-} else if (correct === "Emu") {
+} else {
    messageCat = "Try again. " + messageCat;
    messageDog = "Try again. " + messageDog;
-   messageEmu = "Yes! " + messageEmu;
+   messageEmu = "Correct! " + messageEmu;
    iCorrect = 2;
-} else if (correct === "C") {
-   messageCat = "Yes! " + messageC;
-   messageDog = "Try again. " + messageD;
-   messageEmu = "Try again. " + messageE;
-   iCorrect = 0;
-   paramCatDogEmu = 0;
-} else if (correct === "D") {
-   messageCat = "Try again. " + messageC;
-   messageDog = "Yes! " + messageD;
-   messageEmu = "Try again. " + messageE;
-   iCorrect = 1;
-   paramCatDogEmu = 0;
-} else {
-   messageCat = "Try again. " + messageC;
-   messageDog = "Try again. " + messageD;
-   messageEmu = "Yes! " + messageE;
-   iCorrect = 2;
-   paramCatDogEmu = 0;
 }
 
 const feedback = document.getElementById("feedback");
 const optionsContainer = document.getElementById("options-container");
 
 /* Choices */
-let choices = ["Cat", "Dog", "Emu"];
-if (paramCatDogEmu === 0) 
-     choices = ["C", "D", "E"];
+const choices = ["Cat", "Dog", "Emu"];
 
 /* Create accessible radio buttons with individual tooltips */
 choices.forEach((choice, index) => {
