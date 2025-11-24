@@ -51,15 +51,15 @@
 
 const imageKeyboard = "https://raw.githubusercontent.com/jroger35/JANA-CODE/main/Images/Keyboard_Treble_C_D_E.jpg";
 
-const correctCat = "Correct! Cat is the line below the staff.";
-const correctDog = "Correct! Dog is the space below the staff.";
-const correctEmu = "Correct! Emu is the bottom line.";
+const correctCat = "Yes! C is the line below the staff.";
+const correctDog = "Yes! D is the space below the staff.";
+const correctEmu = "Yes! E is the bottom line.";
 
-const wrongCat = "Try again. Cat is the line below the staff.";
-const wrongDog = "Try again. Dog is the space below the staff."; 
-const wrongEmu = "Try again. Emu is the bottom line of the staff."; 
-const wrongFrog = "Try again. Frog is not a key around the Dog House."; 
-const wrongBee = "Try again. Bee is not a key around the Dog House."; 
+const wrongCat = "Try again. C is the line below the staff.";
+const wrongDog = "Try again. D is the space below the staff."; 
+const wrongEmu = "Try again. E is the bottom line of the staff."; 
+const wrongFrog = "Try again. F is not related to the 2 black keys (Dog House)."; 
+const wrongBee = "Try again. B is not related to the 2 black keys (Dog House)."; 
 const questions = [
   {
     text: "",
@@ -68,10 +68,10 @@ const questions = [
       imageKeyboard 
     ],
     options: [
-      { text: "Cat", feedback: correctCat, correct: true },
-      { text: "Dog", feedback: wrongDog },
-      { text: "Emu", feedback: wrongEmu },
-      { text: "Frog", feedback: wrongFrog }
+      { text: "C", feedback: correctCat, correct: true },
+      { text: "D", feedback: wrongDog },
+      { text: "E", feedback: wrongEmu },
+      { text: "F", feedback: wrongFrog }
     ],
     consecutiveCorrect: 0
   },
@@ -82,10 +82,10 @@ const questions = [
       imageKeyboard 
     ],
     options: [
-      { text: "Cat", feedback: wrongCat },
-      { text: "Dog", feedback: correctDog, correct: true},
-      { text: "Emu", feedback: wrongEmu,  },
-      { text: "Bee", feedback: wrongBee}
+      { text: "C", feedback: wrongCat },
+      { text: "D", feedback: correctDog, correct: true},
+      { text: "E", feedback: wrongEmu,  },
+      { text: "B", feedback: wrongBee}
     ],
     consecutiveCorrect: 0
   },
@@ -96,10 +96,10 @@ const questions = [
       imageKeyboard 
     ],
     options: [
-      { text: "Cat", feedback: wrongCat},
-      { text: "Dog", feedback: wrongDog},
-      { text: "Emu", feedback: correctEmu, correct: true },
-      { text: "Frog", feedback: wrongFrog}
+      { text: "C", feedback: wrongCat},
+      { text: "D", feedback: wrongDog},
+      { text: "E", feedback: correctEmu, correct: true },
+      { text: "F", feedback: wrongFrog}
     ],
     consecutiveCorrect: 0
   }
@@ -221,9 +221,9 @@ function showCompletionMessage() {
 
   // Define the approved ranges
   const ranges = [
-    { min: 5815, max: 5820 },
-    { min: 1264, max: 1270 },
-    { min: 9836, max: 9840 }
+    { min: 2815, max: 2820 },
+    { min: 3264, max: 3270 },
+    { min: 4836, max: 4840 }
   ];
 
   // Pick a random range
